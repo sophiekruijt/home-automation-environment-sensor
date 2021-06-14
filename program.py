@@ -1,12 +1,8 @@
 import time
-import calendar
-import time
 import smbus
 import requests
-import json
 
-# For production, set fakeData to false and location to correct locatioId
-# TO DO move this to a config file
+# TODO move configuration into a config file
 fakeData = False
 location = 2
 
@@ -52,15 +48,13 @@ while 1:
   timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
   print("Timestamp %s" %timestamp)
 
-  if not fakeData:
-    # make a post request with SensorMeasurementTypeId 1 (temperature)
-    data = { 'LocationId':location, 'value':fahrTemp, 'SensorMeasurementTypeId' : 2, 'timestamp':timestamp}
-    r = requests.post("http://35.222.214.26:3000/v1/measurements", json=data)
-    print(r.content)
-    # make a post request with SensorMeasurementTypeId 2 (humidity)
-    data = { 'LocationId':location, 'value':humidity, 'SensorMeasurementTypeId' : 3, 'timestamp':timestamp}
-    r = requests.post("http://35.222.214.26:3000/v1/measurements", json=data)
-    print(r.content)
+  # POST request with SensorMeasurementTypeId 2 (temperature)
+  data = { 'LocationId':location, 'value':fahrTemp, 'SensorMeasurementTypeId' : 2, 'timestamp':timestamp}
+  r = requests.post("http://35.222.214.26:3000/v1/measurements", json=data)
+
+  # POST request with SensorMeasurementTypeId 3 (humidity)
+  data = { 'LocationId':location, 'value':humidity, 'SensorMeasurementTypeId' : 3, 'timestamp':timestamp}
+  r = requests.post("http://35.222.214.26:3000/v1/measurements", json=data)
 
   time.sleep(300)
 
