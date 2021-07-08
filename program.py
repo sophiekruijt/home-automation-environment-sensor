@@ -49,8 +49,8 @@ print("Timestamp %s" %timestamp)
 
 # POST request with SensorMeasurementTypeId 2 (temperature)
 data = { 'LocationId':location, 'value':fahrTemp, 'SensorMeasurementTypeId' : 2, 'timestamp':timestamp}
-r = requests.post("http://35.222.214.26:3000/v1/measurements", json=data)
+r = requests.post("https://api.sophiekruijt.com/v1/measurements", json=data)
 
 # POST request with SensorMeasurementTypeId 3 (humidity)
 data = { 'LocationId':location, 'value':humidity, 'SensorMeasurementTypeId' : 3, 'timestamp':timestamp}
-r = requests.post("http://35.222.214.26:3000/v1/measurements", json=data)
+r = requests.post("https://api.sophiekruijt.com/v1/measurements", json=data)
