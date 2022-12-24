@@ -6,3 +6,4 @@ Python script that collects temperature and humidity data using a Raspberry Pi a
 
 ## Deployment
 SSH into Raspberry Pi's and do a git pull
+ 
