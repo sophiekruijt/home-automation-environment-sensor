@@ -1,4 +1,4 @@
-Python script that collects temperature and humidity data using the Si7021 (https://www.adafruit.com/product/3251) temperature and humidity sensor and a Raspberry Pi.
+Python script that collects temperature and humidity data using a Raspberry Pi and a [Si7021 Temperature & Humidity Sensor Breakout Board](https://www.adafruit.com/product/3251).
 
 ## Development
 `pip install -r requirements.txt`

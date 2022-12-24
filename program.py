@@ -1,15 +1,12 @@
 import time
-import smbus
+import smbus2
 import requests
 
-# TODO move configuration into a config file
 fakeData = False
 location = 2
 
-print("Time to measure the temperature")
-
 if not fakeData:
-  bus = smbus.SMBus(1)
+  bus = smbus2.SMBus(1)
   bus.write_byte(0x40, 0xF5)
 
   time.sleep(0.3)
