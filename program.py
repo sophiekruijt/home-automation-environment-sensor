@@ -1,17 +1,23 @@
+import os
 import time
 import smbus2
 import requests
 
 from aws import getApiUrl
 
-def main():
-    fakeData = True
-    location = 2
+SENSORMEASUREMENT_TYPE_TEMPERATURE = 2
+SENSORMEASUREMENT_TYPE_HUMIDITY = 3
 
+def main():
+    # Get environment variables
+    testMode = os.getenv('SENSOR_TEST_MODE') # If True then fake data is used
+    location = os.getenv('SENSOR_LOCATION_ID')
+
+    # Get API URL from AWS SSM Parameter Store
     API_URL = getApiUrl()
     print("API_URL: %s" % API_URL)
 
-    if not fakeData:
+    if not testMode:
         bus = smbus2.SMBus(1)
         bus.write_byte(0x40, 0xF5)
 
@@ -45,21 +51,18 @@ def main():
     print("Temperature in Celsius is : %.2f C" % celsTemp)
     print("Temperature in Fahrenheit is : %.2f F" % fahrTemp)
 
-    current_time = time.time()
-    print(current_time)
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
-    print("Timestamp %s" % timestamp)
 
     # POST request with SensorMeasurementTypeId 2 (temperature)
     print(API_URL + "/v1/measurements")
  
     data = {'LocationId': location, 'value': fahrTemp,
-            'SensorMeasurementTypeId': 2, 'timestamp': timestamp}
+            'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_TEMPERATURE, 'timestamp': timestamp}
     r = requests.post(API_URL+"/v1/measurements", json=data)
 
     # POST request with SensorMeasurementTypeId 3 (humidity)
     data = {'LocationId': location, 'value': humidity,
-            'SensorMeasurementTypeId': 3, 'timestamp': timestamp}
+            'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_HUMIDITY, 'timestamp': timestamp}
     r = requests.post(API_URL+"/v1/measurements", json=data)
 
 if __name__ == "__main__":
