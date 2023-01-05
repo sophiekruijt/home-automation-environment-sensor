@@ -61,14 +61,14 @@ def main():
             'value': fahrTemp,
             'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_TEMPERATURE,
             'timestamp': timestamp}
-    r = requests.post(API_URL+"/v1/measurements", json = data)
+    r = requests.post(API_URL + "/v1/measurements", json=data)
 
     # POST request with SensorMeasurementTypeId 3 (humidity)
     data = {'LocationId': location,
             'value': humidity,
             'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_HUMIDITY,
             'timestamp': timestamp}
-    r = requests.post(API_URL+"/v1/measurements", json = data)
+    r = requests.post(API_URL + "/v1/measurements", json=data)
 
 
 if __name__ == "__main__":
