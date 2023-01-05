@@ -11,7 +11,7 @@ SENSORMEASUREMENT_TYPE_HUMIDITY = 3
 
 def main():
     # Get environment variables
-    testMode = os.getenv('SENSOR_TEST_MODE') # If True then fake data is used
+    testMode = os.getenv('SENSOR_TEST_MODE')  # If True then fake data is used
     location = os.getenv('SENSOR_LOCATION_ID')
 
     # Get API URL from AWS SSM Parameter Store
@@ -57,13 +57,17 @@ def main():
     # POST request with SensorMeasurementTypeId 2 (temperature)
     print(API_URL + "/v1/measurements")
 
-    data = {'LocationId': location, 'value': fahrTemp,
-            'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_TEMPERATURE, 'timestamp': timestamp}
+    data = {'LocationId': location,
+            'value': fahrTemp,
+            'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_TEMPERATURE,
+            'timestamp': timestamp}
     r = requests.post(API_URL+"/v1/measurements", json=data)
 
     # POST request with SensorMeasurementTypeId 3 (humidity)
-    data = {'LocationId': location, 'value': humidity,
-            'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_HUMIDITY, 'timestamp': timestamp}
+    data = {'LocationId': location,
+            'value': humidity,
+            'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_HUMIDITY,
+            'timestamp': timestamp}
     r = requests.post(API_URL+"/v1/measurements", json=data)
 
 
