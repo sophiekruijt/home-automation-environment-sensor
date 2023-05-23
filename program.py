@@ -2,20 +2,28 @@ import os
 import time
 import smbus2
 import requests
+import sentry_sdk
 
-from aws import getApiUrl
+from aws import get_secret
 
 SENSORMEASUREMENT_TYPE_TEMPERATURE = 2
 SENSORMEASUREMENT_TYPE_HUMIDITY = 3
 
-
 def main():
+
+    SENTRY_URL = get_secret("SENTRY_URL")
+    print(SENTRY_URL)
+    sentry_sdk.init(
+        dsn=SENTRY_URL,
+        traces_sample_rate=1.0
+    )
+
     # Get environment variables
     testMode = os.getenv('SENSOR_TEST_MODE')  # If True then fake data is used
     location = os.getenv('SENSOR_LOCATION_ID')
 
     # Get API URL from AWS SSM Parameter Store
-    API_URL = getApiUrl()
+    API_URL = get_secret("API_URL")
     print("API_URL: %s" % API_URL)
 
     if not testMode:
@@ -62,6 +70,7 @@ def main():
             'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_TEMPERATURE,
             'timestamp': timestamp}
     r = requests.post(API_URL + "/v1/measurements", json=data)
+    print(r)
 
     # POST request with SensorMeasurementTypeId 3 (humidity)
     data = {'LocationId': location,
@@ -69,7 +78,7 @@ def main():
             'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_HUMIDITY,
             'timestamp': timestamp}
     r = requests.post(API_URL + "/v1/measurements", json=data)
-
+    print(r)
 
 if __name__ == "__main__":
     main()
