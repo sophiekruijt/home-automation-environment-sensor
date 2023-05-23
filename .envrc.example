@@ -1,0 +1,3 @@
+source python/bin/activate
+export SENSOR_TEST_MODE=true
+export SENSOR_LOCATION_ID=123
