@@ -8,5 +8,9 @@ Python script that collects temperature and humidity data using a Raspberry Pi a
 `pip install -r requirements.txt`
 `python program.py`
 
+## Logging and monitoring
+
+This script is monitored by sentry.io. You can also SSH into each Raspberry PI and review the logs
+
 ## Deployment
 SSH into Raspberry Pi's and do a git pull
