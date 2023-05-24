@@ -9,6 +9,7 @@ from aws import get_secret
 SENSORMEASUREMENT_TYPE_TEMPERATURE = 2
 SENSORMEASUREMENT_TYPE_HUMIDITY = 3
 
+
 def main():
 
     SENTRY_URL = get_secret("SENTRY_URL")
@@ -19,14 +20,14 @@ def main():
     )
 
     # Get environment variables
-    testMode = os.getenv('SENSOR_TEST_MODE')  # If True then fake data is used
+    test_mode = os.getenv('SENSOR_TEST_MODE')  # If True then fake data is used
     location = os.getenv('SENSOR_LOCATION_ID')
 
     # Get API URL from AWS SSM Parameter Store
-    API_URL = get_secret("API_URL")
-    print("API_URL: %s" % API_URL)
+    api_url = get_secret("API_URL")
+    print(f'API_URL: {api_url}')
 
-    if not testMode:
+    if not test_mode:
         bus = smbus2.SMBus(1)
         bus.write_byte(0x40, 0xF5)
 
@@ -48,37 +49,37 @@ def main():
         data1 = bus.read_byte(0x40)
 
         # Convert the data and output it
-        celsTemp = ((data0 * 256 + data1) * 175.72 / 65536.0) - 46.85
-        fahrTemp = celsTemp * 1.8 + 32
+        temp_celcius = ((data0 * 256 + data1) * 175.72 / 65536.0) - 46.85
+        temp_fahrenheit = temp_celcius * 1.8 + 32
 
     else:
         humidity = 90.0
-        fahrTemp = 76.45
-        celsTemp = 24.5
+        temp_fahrenheit = 76.45
+        temp_celcius = 24.5
 
-    print("Relative Humidity is : %.2f %%" % humidity)
-    print("Temperature in Celsius is : %.2f C" % celsTemp)
-    print("Temperature in Fahrenheit is : %.2f F" % fahrTemp)
+    print(f'Relative Humidity: {humidity}')
+    print(f'Temperature in Celsius: {temp_celcius}')
+    print(f'Temperature in Fahrenheit: {temp_fahrenheit} F')
 
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
 
     # POST request with SensorMeasurementTypeId 2 (temperature)
-    print(API_URL + "/v1/measurements")
+    print(api_url + "/v1/measurements")
 
     data = {'LocationId': location,
-            'value': fahrTemp,
+            'value': temp_fahrenheit,
             'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_TEMPERATURE,
             'timestamp': timestamp}
-    r = requests.post(API_URL + "/v1/measurements", json=data)
-    print(r)
+    requests.post(api_url + "/v1/measurements", json=data)
 
     # POST request with SensorMeasurementTypeId 3 (humidity)
     data = {'LocationId': location,
             'value': humidity,
             'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_HUMIDITY,
             'timestamp': timestamp}
-    r = requests.post(API_URL + "/v1/measurements", json=data)
-    print(r)
+    requests.post(api_url + "/v1/measurements", json=data)
+
 
 if __name__ == "__main__":
+
     main()
