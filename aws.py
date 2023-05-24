@@ -3,8 +3,7 @@ import json
 from botocore.exceptions import ClientError
 
 
-def get_secret(secretName):
-    secret_name = secretName
+def get_secret(secret_name):
     region_name = "us-east-1"
 
     session = boto3.session.Session()
@@ -21,4 +20,4 @@ def get_secret(secretName):
         raise e
 
     secret = get_secret_value_response['SecretString']
-    return json.loads(secret)[secretName]
+    return json.loads(secret)[secret_name]
