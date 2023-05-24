@@ -2,6 +2,7 @@ import boto3
 import json
 from botocore.exceptions import ClientError
 
+
 def get_secret(secretName):
     secret_name = secretName
     region_name = "us-east-1"

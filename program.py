@@ -49,17 +49,17 @@ def main():
         data1 = bus.read_byte(0x40)
 
         # Convert the data and output it
-        temperature_celcius = ((data0 * 256 + data1) * 175.72 / 65536.0) - 46.85
-        temperature_fahrenheit = temperature_celcius * 1.8 + 32
+        temp_celcius = ((data0 * 256 + data1) * 175.72 / 65536.0) - 46.85
+        temp_fahrenheit = temp_celcius * 1.8 + 32
 
     else:
         humidity = 90.0
-        temperature_fahrenheit = 76.45
-        temperature_celcius = 24.5
+        temp_fahrenheit = 76.45
+        temp_celcius = 24.5
 
     print(f'Relative Humidity: {humidity}')
-    print(f'Temperature in Celsius: {temperature_celcius}')
-    print(f'Temperature in Fahrenheit: {temperature_fahrenheit} F')
+    print(f'Temperature in Celsius: {temp_celcius}')
+    print(f'Temperature in Fahrenheit: {temp_fahrenheit} F')
 
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -67,17 +67,18 @@ def main():
     print(api_url + "/v1/measurements")
 
     data = {'LocationId': location,
-            'value': temperature_fahrenheit,
+            'value': temp_fahrenheit,
             'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_TEMPERATURE,
             'timestamp': timestamp}
     result = requests.post(api_url + "/v1/measurements", json=data)
-    
+
     # POST request with SensorMeasurementTypeId 3 (humidity)
     data = {'LocationId': location,
             'value': humidity,
             'SensorMeasurementTypeId': SENSORMEASUREMENT_TYPE_HUMIDITY,
             'timestamp': timestamp}
     result2 = requests.post(api_url + "/v1/measurements", json=data)
+
 
 if __name__ == "__main__":
 
